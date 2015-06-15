@@ -8,14 +8,14 @@
 
 #获取元素的CSS属性函数：
 
-function getStyle(obj,attr){
-		if(obj.currentStyle){
-			return obj.currentStyle[attr];//兼容IE
-			console.log(obj.currentStyle[attr]);
-		}else{
-			return getComputedStyle(obj,false)[attr];//兼容FireFox
-			console.log(getComputedStyle(obj,false)[attr])
-		}
-	}
+##function getStyle(obj,attr){
+##		if(obj.currentStyle){
+##			return obj.currentStyle[attr];//兼容IE
+##			console.log(obj.currentStyle[attr]);
+##		}else{
+##			return getComputedStyle(obj,false)[attr];//兼容FireFox
+##			console.log(getComputedStyle(obj,false)[attr])
+##		}
+##	}
 	
-#另外，主函数传参，运用了json数据。
+#另外，主函数传参，运用了json数据,可以实现多种CSS属性的同时动画。
