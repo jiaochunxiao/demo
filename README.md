@@ -18,4 +18,4 @@ function getStyle(obj,attr){
 		}
 	}
 	
-	另外，主函数传参，运用了json数据。
+#另外，主函数传参，运用了json数据。
