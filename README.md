@@ -8,7 +8,7 @@
 
 #获取元素的CSS属性函数：
 
-##3#function getStyle(obj,attr){
+####function getStyle(obj,attr){
 ####		if(obj.currentStyle){
 ####			return obj.currentStyle[attr];//兼容IE
 ####			console.log(obj.currentStyle[attr]);
