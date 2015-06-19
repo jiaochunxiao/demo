@@ -8,6 +8,7 @@
 
 ###获取元素的CSS属性函数：
 
+
 function getStyle(obj,attr){
 	
 	if(obj.currentStyle){
@@ -25,5 +26,6 @@ function getStyle(obj,attr){
 	}
 
 }
+
 	
 另外，主函数传参，运用了json数据,可以实现多种CSS属性的同时动画。
