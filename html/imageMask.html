@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>遮罩动画</title>
+	<style type="text/css">
+	.wrapper{
+		width: 800px;
+		height: 400px;
+		margin: 0 auto;
+	}
+	.img-text-box{
+		position: relative;
+		margin-top: 10px;
+		float: left;
+		width:400px;
+		height: 220px;
+		overflow: hidden;
+	}
+	.text-box{
+		position: absolute;
+		justify-content: center;
+		align-items: center;
+		display: -webkit-flex;
+		width: 391px;
+		height: 250px;
+		top: -220px;
+		font-family: cursive;
+		font-size: 50px;
+		color: #0f0;
+		text-align: center;
+		left: 0;
+		background: #111;
+		opacity: 0;
+	}
+	</style>
+</head>
+<body>
+	<div class="wrapper">
+		<div class="img-text-box">
+			<img src="../css/img/11.jpg">
+			<div class="text-box">
+				<span>Hello</span>
+			</div>
+		</div>
+		<div class="img-text-box">
+			<img src="../css/img/11.jpg">
+			<div class="text-box">
+				<span>World</span>
+			</div>
+		</div>
+		<div class="img-text-box">
+			<img src="../css/img/11.jpg">
+			<div class="text-box">
+				<span>Hello</span>
+			</div>
+		</div>
+		<div class="img-text-box">
+			<img src="../css/img/11.jpg">
+			<div class="text-box">
+				<span>World</span>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script>
+	<script type="text/javascript">
+	$(function(){
+		$('.img-text-box').hover(function(){
+			$(this).children('.text-box').stop(true,true).delay(100).animate({'top':0,opacity:0.4},300);
+		},function(){
+			$(this).children('.text-box').stop(true,true).animate({'top':-250,opacity:0},200);
+		})
+	})
+	</script>
+</body>
+</html>
