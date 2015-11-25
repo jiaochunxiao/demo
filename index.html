@@ -9,52 +9,37 @@
 		padding: 0;
 		height: 100%;
 	}
-	ul,li{
-		list-style: none;
+	.wrapper{
+		width: 80%;
+		margin: 0 auto;
 	}
-	ul li{
-		width: 200px;
-		height: 100px;
-		margin-top:20px;
-		background: #f00;
-		border: 4px solid #000;
-		filter:alpha(opacity:50);
-		opacity: 0.5;
+	.wrapper .title{
+		width: 100%;
+		text-align: center;
+		font-family: cursive;
+		font-size: 40px;
+	}
+	.wrapper .link,
+	.wrapper .link li{
+		list-style-type: none;
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+	.wrapper .link li{
+		line-height: 30px;
 	}
 	</style>
-	<script type="text/javascript" src="js/animate.js"></script>
-	<script type="text/javascript">
-    window.onload=function(){
-    	var Li1=document.getElementById("li1");
-    	var Li2=document.getElementById("li2");
-    	var Li3=document.getElementById("li3");
-    	Li1.onmouseover=function(){
-    		startMove(Li1,{'width':300})
-      	}
-    	Li1.onmouseout=function(){
-    		startMove(Li1,{'width':200});
-    	}
-    	Li2.onmouseover=function(){
-    		startMove(Li2,{'width':300})
-      	}
-    	Li2.onmouseout=function(){
-    		startMove(Li2,{'width':200});
-    	}
-    	Li3.onmouseover=function(){
-    		startMove(Li3,{'width':300,'height':300,'opacity':90})
-      	}
-    	Li3.onmouseout=function(){
-    		startMove(Li3,{'width':200,'height':100,'opacity':50});
-    	}
-  
-    }
-	</script>
 </head>
 <body>
-	<ul>
-		<li id="li1"></li>
-		<li id="li2"></li>
-		<li id="li3"></li>
-	</ul>
+	<div class="wrapper">
+		<div class="title">
+			举个栗子
+		</div>
+		<ul class="link">
+			<li><a href="html/imageMask.html">鼠标悬浮,文案显示,鼠标移走,文案消失</a></li>
+			<li><a href="html/animate.html">鼠标悬浮,长宽及透明度的变化</a></li>
+		</ul>
+	</div>
 </body>
 </html>
