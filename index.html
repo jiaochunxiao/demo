@@ -8,10 +8,12 @@
 		margin: 0;
 		padding: 0;
 		height: 100%;
+		font-family: 'Microsoft Yahei';
 	}
 	.wrapper{
 		width: 80%;
 		margin: 0 auto;
+		
 	}
 	.wrapper .title{
 		width: 100%;
@@ -19,15 +21,48 @@
 		font-family: cursive;
 		font-size: 40px;
 	}
+	.wrapper .link{
+		display: flex;
+		display: -webkit-flex;
+		flex-direction: column;
+		-webkit-flex-direction: column;
+	}
 	.wrapper .link,
 	.wrapper .link li{
 		list-style-type: none;
 		list-style: none;
 		margin: 0;
 		padding: 0;
+		font-size: 16px;
 	}
 	.wrapper .link li{
-		line-height: 30px;
+		flex: 1;
+		-webkit-flex: 1;
+		width: 50%;
+		text-align: center;
+		height: 50px;
+		line-height: 50px;
+		display: block;
+		border: 1px solid #ccc;
+		border-radius: 5px; 
+		margin: 10px auto;
+		background: #0095cd;
+		background: -webkit-linear-gradient(#00adee, #0078a5);
+		background: -o-linear-gradient(#00adee, #0078a5);
+		background: linear-gradient(#00adee, #0078a5);
+		filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#00adee', endColorstr='#0078a5');
+	
+	}
+	.wrapper .link li:hover{
+		cursor: pointer;
+		background: #007ead;
+		background: -webkit-gradient(linear, left top, left bottom, from(#0095cc), to(#00678e));
+		background: -moz-linear-gradient(top,  #0095cc,  #00678e);
+		filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#0095cc', endColorstr='#00678e');
+	}
+	.wrapper .link li a{
+		text-decoration: none;
+		color: #fff;
 	}
 	</style>
 </head>
