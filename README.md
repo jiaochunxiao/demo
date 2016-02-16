@@ -1,4 +1,4 @@
-# animate
+## animate
 此简单动画框架，是慕课网上课程为"js动画效果"的js代码，授课老师为vivian。
 ###此课程中的关键知识点：
 
@@ -30,9 +30,16 @@ function getStyle(obj,attr){
 	
 另外，主函数传参，运用了json数据,可以实现多种CSS属性的同时动画。
 
-# 图片中心放大
+## 图片中心放大
 
-# 图片悬浮遮罩
+[线上demo](http://jiaochunxiao.github.io/demo/html/imageScale.html)
 
-# slide-around
+## 图片悬浮遮罩
+
+[线上demo](http://jiaochunxiao.github.io/demo/html/imageMask.html)
+
+## slide-around
 参考自[yy709593266](https://github.com/yy709593266/slide-around)，待优化
+
+[线上demo](http://jiaochunxiao.github.io/demo/html/slide-around.html)
+
