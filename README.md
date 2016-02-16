@@ -31,5 +31,5 @@ function getStyle(obj,attr){
 另外，主函数传参，运用了json数据,可以实现多种CSS属性的同时动画。
 
 #图片中心放大
-
+测试new_id
 #图片悬浮遮罩
