@@ -33,3 +33,6 @@ function getStyle(obj,attr){
 #图片中心放大
 
 #图片悬浮遮罩
+
+##slide-around
+参考自[yy709593266](https://github.com/yy709593266/slide-around)，待优化
