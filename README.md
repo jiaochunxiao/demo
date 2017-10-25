@@ -30,9 +30,9 @@ function getStyle(obj,attr){
 	
 另外，主函数传参，运用了json数据,可以实现多种CSS属性的同时动画。
 
-#图片中心放大
+# 图片中心放大
 
-#图片悬浮遮罩
+# 图片悬浮遮罩
 
-##slide-around
+# slide-around
 参考自[yy709593266](https://github.com/yy709593266/slide-around)，待优化
