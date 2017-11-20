@@ -32,7 +32,7 @@ function getStyle(obj,attr){
 
 ## 图片中心放大
 
-[线上demo](http://jiaochunxiao.github.io/demo/html/imageScale.html)
+[线上demo](http://jiaochunxiao.github.io/demo/html/imgScale.html)
 
 ## 图片悬浮遮罩
 
