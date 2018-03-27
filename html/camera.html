@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>camera</title>
+    <style type="text/css">
+        .container {
+            height: 100%;
+        }
+        .camera-input {
+            height: 230px;
+        }
+        #take-video {
+            display: block;
+            height: 30px;
+            box-sizing: border-box;
+            border: 1px solid #fdfdfd;
+            line-height: 28px;
+        }
+        #image-input {
+            height: 200px;
+        }
+        #image-input > img {
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <section class="camera-input">
+            <input type="file" accept="video/*" id="take-video" capture="camcorder"/>
+            <div id="image-input"></div>
+        </section>
+    </div>
+    <script>
+        const input = document.getElementById('take-video');
+        const container = document.getElementById('image-input');
+
+        input.onchange = function (event) {
+            const files = event.target.files;
+            if (files && files.length > 0) {
+                let file = files[0];
+                let reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = function (event) {
+                    let baseUrl = event.target.result;
+                    alert(baseUrl);
+                    // let image = document.createElement('img');
+                    // image.src = baseUrl;
+                    // container.appendChild(image);
+                }
+            }
+        }
+    </script>
+</body>
+</html>
