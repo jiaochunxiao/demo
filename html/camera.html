@@ -8,6 +8,11 @@
         .container {
             height: 100%;
         }
+        .tips {
+            marign: 20px auto;
+            font-size: 14px;
+            color: #fc9153;
+        }
         .camera-input {
             position: relative;
             height: 30px;
@@ -32,13 +37,18 @@
             line-height: 28px;
             opacity: 0;
         }
-        .video-show {
-            height: 200px;
+        #video-show {
+            margin-top: 20px;
+            max-height: 200px;
+        }
+        #video-show video {
+            max-height: 200px;
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <div class="tips">本demo主要针对移动端的H5页面调起摄像头，录制视频，并显示。</div>
         <div class="camera-input">
             <div class="video-button">录制视频</div>
             <input type="file" accept="video/*" id="take-video" capture="camcorder"/>
@@ -56,11 +66,14 @@
                 let reader = new FileReader();
                 reader.readAsDataURL(file);
                 reader.addEventListener('loadend', function() {
-                    alert(reader.result);
                     const video = document.createElement('video');
                     video.src = reader.result;
+                    video.setAttribute('controls', 'controls');
                     container.appendChild(video);
                 })
+            }
+            else {
+                alert('请重新上传视频');
             }
         }
     </script>
