@@ -9,33 +9,45 @@
             height: 100%;
         }
         .camera-input {
-            height: 230px;
+            position: relative;
+            height: 30px;
+        }
+        .video-button {
+            margin: 0 auto;
+            width: 80%;
+            background: #fc9153;
+            font-size: 14px;
+            color: #fff;
+            line-height: 30px;
+            text-align: center;
         }
         #take-video {
-            display: block;
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
             height: 30px;
             box-sizing: border-box;
             border: 1px solid #fdfdfd;
             line-height: 28px;
+            opacity: 0;
         }
-        #image-input {
+        .video-show {
             height: 200px;
-        }
-        #image-input > img {
-            width: 200px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <section class="camera-input">
+        <div class="camera-input">
+            <div class="video-button">录制视频</div>
             <input type="file" accept="video/*" id="take-video" capture="camcorder"/>
-            <div id="image-input"></div>
-        </section>
+        </div>
+        <div id="video-show"></div>
     </div>
     <script>
         const input = document.getElementById('take-video');
-        const container = document.getElementById('image-input');
+        const container = document.getElementById('video-show');
 
         input.onchange = function (event) {
             const files = event.target.files;
@@ -43,15 +55,11 @@
                 let file = files[0];
                 let reader = new FileReader();
                 reader.readAsDataURL(file);
-                reader.onload = function (event) {
-                    let baseUrl = event.target.result;
-                    alert(baseUrl);
-                    // let image = document.createElement('img');
-                    // image.src = baseUrl;
-                    // container.appendChild(image);
-                }
                 reader.addEventListener('loadend', function() {
                     alert(reader.result);
+                    const video = document.createElement('video');
+                    video.src = reader.result;
+                    container.appendChild(video);
                 })
             }
         }
