@@ -50,6 +50,9 @@
                     // image.src = baseUrl;
                     // container.appendChild(image);
                 }
+                reader.addEventListener('loadend', function() {
+                    alert(reader.result);
+                })
             }
         }
     </script>
