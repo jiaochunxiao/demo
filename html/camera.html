@@ -9,8 +9,10 @@
             height: 100%;
         }
         .tips {
+            width: 80%;
             margin: 20px auto;
             font-size: 14px;
+            line-height: 20px;
             color: #fc9153;
         }
         .camera-input {
@@ -42,6 +44,7 @@
             max-height: 200px;
         }
         #video-show video {
+            margin: 0 auto;
             max-height: 200px;
         }
     </style>
@@ -58,18 +61,30 @@
     <script>
         const input = document.getElementById('take-video');
         const container = document.getElementById('video-show');
-
         input.onchange = function (event) {
             const files = event.target.files;
             if (files && files.length > 0) {
                 let file = files[0];
+                console.log(file);
+                if (file.size > 50 * 1024 * 1024) {
+                    alert('视频大于10M，请重新上传');
+                    return;
+                }
                 let reader = new FileReader();
                 reader.readAsDataURL(file);
                 reader.addEventListener('loadend', function() {
-                    const video = document.createElement('video');
-                    video.src = reader.result;
-                    video.setAttribute('controls', 'controls');
-                    container.appendChild(video);
+                    const localVideo = document.getElementById('local-video');
+                    if (localVideo) {
+                        localVideo.src = reader.result;
+                    }
+                    else {
+                        const video = document.createElement('video');
+                        video.src = reader.result;
+                        video.id = 'local-video';
+                        video.setAttribute('controls', 'controls');
+                        container.appendChild(video);
+                    }
+                    
                 })
             }
             else {
