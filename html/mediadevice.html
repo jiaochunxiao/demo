@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>webrtc-medaidevices</title>
+    <style type="text/css">
+    html,
+    body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+    }
+    .container {
+        width: 80%;
+        margin: 0 auto;
+        overflow: hidden;
+    }
+    .tips {
+        margin: 10px auto;
+        text-align: center;
+        line-height: 20px;
+        font-size: 14px;
+        color: #fc9153;
+    }
+    #video {
+        display: block;
+        margin: 0 auto;
+        width: 640px;
+        height: 480px;
+    }
+    .video-action {
+        text-align: center;
+        margin: 10px auto;
+    }
+    .video-action button {
+        display: inline-block;
+        outline: none;
+        width: 120px;
+        line-height: 34px;
+        color: #fff;
+        background: #fc9153;
+        font-size: 16px;
+        border: 0;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+    .video-container {
+        text-align: center;
+    }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="tips">
+            本demo主要用于PC端，调用摄像头录制视频，并转码。
+        </div>
+        <video id="video" autoplay sytle=></video>
+        <div class="video-action">
+            <button id="start">开始录像</button>
+            <button id="stop">停止录像</button>
+        </div>
+        <div class="video-container">
+            <video id="video-show" width="320" height="240" controls></video>
+        </div>
+    </div>
+    <script>
+        const video = document.getElementById('video');
+        const start = document.getElementById('start');
+        const stop = document.getElementById('stop');
+        const videoShow = document.getElementById('video-show');
+
+        class RecordVideo {
+            constructor(option) {
+                this.video = option.video;
+                this.start = option.start;
+                this.stop = option.stop;
+                this.stopcb = option.stopcb || function () {};
+                this.videoData = "";
+                this.mediaRecorder = null;
+                this.canUse = true;
+                this.chunks = [];
+            }
+
+            init() {
+                if (!this._isSupport()) {
+                    this.canUse = false;
+                    return false;
+                }
+                navigator
+                    .mediaDevices
+                    .getUserMedia({
+                        video: true
+                    })
+                    .then(stream => {
+                        if ('srcObject' in this.video) {
+                            this.video.srcObject = stream;
+                        }
+                        else {
+                            this.video.src = window.URL.createObjectURL(stream);
+                        }
+                        this.video.addEventListener('loadmetadata', () => {
+                            this.video.play();
+                        });
+                        this.mediaRecorder = new MediaRecorder(stream);
+
+                        this.mediaRecorder.addEventListener('stop', () => {
+                            console.log(new Date().getTime());
+                            const blob = new Blob(this.chunks, {
+                                type: 'video/webm'
+                            });
+                            const reader = new FileReader();
+                            reader.readAsDataURL(blob);
+
+                            reader.addEventListener('loadend', () => {
+                                this.videoData = reader.result;
+                                console.log(reader.result);
+                                this.stopcb(reader.result);
+                            });
+                        });
+
+                        this.mediaRecorder.addEventListener('dataavailable', e => {
+                            this.chunks.push(e.data);
+                        });
+                        return stream;
+                    })
+            }
+            _start() {
+                if (this.mediaRecorder.state === 'inactive') {
+                    this.mediaRecorder.start();  
+                }
+            }
+            _stop() {
+                if (this.mediaRecorder.state === 'recording') {
+                    this.mediaRecorder.stop();
+                }
+            }
+            _isSupport() {
+                const flag = navigator.mediaDevices && navigator.mediaDevices.getUserMedia;
+                if (flag) {
+                    return true;
+                }
+                return;
+            }
+        }
+        const videoRecord = new RecordVideo({
+            video: video,
+            start: start,
+            stop: stop,
+            stopcb: function (data) {
+                videoShow.src = data;
+            }
+        });
+        videoRecord.init();
+        start.addEventListener('click', () => {
+            console.log('start');
+            videoRecord._start();
+        });
+        stop.addEventListener('click', () => {
+            console.log('end');
+            videoRecord._stop();
+        })
+    </script>
+</body>
+</html>
