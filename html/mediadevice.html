@@ -86,7 +86,8 @@
                 navigator
                     .mediaDevices
                     .getUserMedia({
-                        video: true
+                        video: true,
+                        audio: true
                     })
                     .then(stream => {
                         if ('srcObject' in this.video) {
@@ -100,25 +101,9 @@
                         });
                         this.mediaRecorder = new MediaRecorder(stream);
 
-                        // this.mediaRecorder.addEventListener('stop', () => {
-                        //     console.log(new Date().getTime());
-                        //     const blob = new Blob(this.chunks, {
-                        //         type: 'video/webm'
-                        //     });
-                        //     const reader = new FileReader();
-                        //     reader.readAsDataURL(blob);
-
-                        //     reader.addEventListener('loadend', () => {
-                        //         this.videoData = reader.result;
-                        //         console.log(reader.result);
-                        //         this.stopcb(reader.result);
-                        //     });
-                        // });
-
                         this.mediaRecorder.addEventListener('dataavailable', e => {
                             this.chunks.push(e.data);
                         });
-                        return stream;
                     })
             }
             _start() {
@@ -162,6 +147,7 @@
             console.log('end');
             videoRecord._stop();
             setTimeout(() => {
+                console.log(videoRecord.chunks[0].size);
                 const blob = new Blob(videoRecord.chunks, {
                     type: 'video/webm'
                 });
