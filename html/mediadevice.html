@@ -65,10 +65,6 @@
         </div>
     </div>
     <script>
-        const video = document.getElementById('video');
-        const start = document.getElementById('start');
-        const stop = document.getElementById('stop');
-        const videoShow = document.getElementById('video-show');
 
         class RecordVideo {
             constructor(option) {
@@ -104,20 +100,20 @@
                         });
                         this.mediaRecorder = new MediaRecorder(stream);
 
-                        this.mediaRecorder.addEventListener('stop', () => {
-                            console.log(new Date().getTime());
-                            const blob = new Blob(this.chunks, {
-                                type: 'video/webm'
-                            });
-                            const reader = new FileReader();
-                            reader.readAsDataURL(blob);
+                        // this.mediaRecorder.addEventListener('stop', () => {
+                        //     console.log(new Date().getTime());
+                        //     const blob = new Blob(this.chunks, {
+                        //         type: 'video/webm'
+                        //     });
+                        //     const reader = new FileReader();
+                        //     reader.readAsDataURL(blob);
 
-                            reader.addEventListener('loadend', () => {
-                                this.videoData = reader.result;
-                                console.log(reader.result);
-                                this.stopcb(reader.result);
-                            });
-                        });
+                        //     reader.addEventListener('loadend', () => {
+                        //         this.videoData = reader.result;
+                        //         console.log(reader.result);
+                        //         this.stopcb(reader.result);
+                        //     });
+                        // });
 
                         this.mediaRecorder.addEventListener('dataavailable', e => {
                             this.chunks.push(e.data);
@@ -143,6 +139,12 @@
                 return;
             }
         }
+
+        const video = document.getElementById('video');
+        const start = document.getElementById('start');
+        const stop = document.getElementById('stop');
+        const videoShow = document.getElementById('video-show');
+
         const videoRecord = new RecordVideo({
             video: video,
             start: start,
@@ -159,6 +161,19 @@
         stop.addEventListener('click', () => {
             console.log('end');
             videoRecord._stop();
+            setTimeout(() => {
+                const blob = new Blob(videoRecord.chunks, {
+                    type: 'video/webm'
+                });
+                const reader = new FileReader();
+                reader.readAsDataURL(blob);
+
+                reader.addEventListener('loadend', () => {
+                    videoRecord.videoData = reader.result;
+                    console.log(reader.result);
+                    videoRecord.stopcb(reader.result);
+                });
+            }, 0);
         })
     </script>
 </body>
