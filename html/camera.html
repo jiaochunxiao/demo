@@ -66,8 +66,9 @@
             const files = event.target.files;
             if (files && files.length > 0) {
                 let file = files[0];
-                console.log(file.size);
-                alert(file.size);
+                for(let key in file) {
+                    alert(key + ":" + file[key])
+                }
                 if (file.size > 50 * 1024 * 1024) {
                     alert('视频大于50M，请重新上传');
                     return;
