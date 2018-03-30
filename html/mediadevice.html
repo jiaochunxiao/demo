@@ -65,24 +65,19 @@
         </div>
     </div>
     <script>
-
+        /**
+         * 视频记录
+         */
         class RecordVideo {
             constructor(option) {
                 this.video = option.video;
-                this.start = option.start;
-                this.stop = option.stop;
-                this.stopcb = option.stopcb || function () {};
-                this.videoData = "";
+                this.execpt = option.execpt || function() {};
                 this.mediaRecorder = null;
                 this.canUse = true;
                 this.chunks = [];
             }
 
             init() {
-                if (!this._isSupport()) {
-                    this.canUse = false;
-                    return false;
-                }
                 navigator
                     .mediaDevices
                     .getUserMedia({
@@ -105,6 +100,9 @@
                             this.chunks.push(e.data);
                         });
                     })
+                    .catch(error => {
+                        this.execpt();
+                    })
             }
             _start() {
                 if (this.mediaRecorder.state === 'inactive') {
@@ -125,42 +123,41 @@
             }
         }
 
-        const video = document.getElementById('video');
-        const start = document.getElementById('start');
-        const stop = document.getElementById('stop');
+        const videoContainer = document.getElementById('video');
+        const videoStart = document.getElementById('start');
+        const videoStop = document.getElementById('stop');
         const videoShow = document.getElementById('video-show');
 
         const videoRecord = new RecordVideo({
-            video: video,
-            start: start,
-            stop: stop,
-            stopcb: function (data) {
-                videoShow.src = data;
+            video: videoContainer,
+            execpt: function() {
+                alert('请开启浏览器的摄像头、麦克风权限');
             }
         });
-        videoRecord.init();
-        start.addEventListener('click', () => {
-            console.log('start');
-            videoRecord._start();
-        });
-        stop.addEventListener('click', () => {
-            console.log('end');
-            videoRecord._stop();
-            setTimeout(() => {
-                console.log(videoRecord.chunks[0].size);
-                const blob = new Blob(videoRecord.chunks, {
-                    type: 'video/webm'
-                });
-                const reader = new FileReader();
-                reader.readAsDataURL(blob);
-
-                reader.addEventListener('loadend', () => {
-                    videoRecord.videoData = reader.result;
-                    console.log(reader.result);
-                    videoRecord.stopcb(reader.result);
-                });
-            }, 0);
-        })
+        if (!videoRecord._isSupport()) {
+            alert('当前浏览器不支持，推荐使用chrome或者firefox浏览器');
+        }
+        else {
+            videoRecord.init();
+            videoStart.addEventListener('click', () => {
+                console.log('start');
+                videoRecord._start();
+            });
+            videoStop.addEventListener('click', () => {
+                console.log('end');
+                videoRecord._stop();
+                setTimeout(() => {
+                    const blob = new Blob(videoRecord.chunks, {
+                        type: 'video/webm'
+                    });
+                    const reader = new FileReader();
+                    reader.readAsDataURL(blob);
+                    reader.addEventListener('loadend', () => {
+                        videoShow.src = reader.result;
+                    });
+                }, 0);
+            });
+        }
     </script>
 </body>
 </html>
