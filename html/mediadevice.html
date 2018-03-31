@@ -69,9 +69,11 @@
          * 视频记录
          */
         class RecordVideo {
-            constructor(option) {
-                this.video = option.video;
-                this.execpt = option.execpt || function() {};
+            constructor(video, exceptCb, width, height) {
+                this.video = video;
+                this.exceptCb = exceptCb || function() {};
+                this.width = width || 640;
+                this.height = height || 480;
                 this.mediaRecorder = null;
                 this.canUse = true;
                 this.chunks = [];
@@ -81,7 +83,10 @@
                 navigator
                     .mediaDevices
                     .getUserMedia({
-                        video: true,
+                        video: {
+                            width: this.width,
+                            height: this.height
+                        },
                         audio: true
                     })
                     .then(stream => {
@@ -101,7 +106,7 @@
                         });
                     })
                     .catch(error => {
-                        this.execpt();
+                        this.execptCb();
                     })
             }
             _start() {
@@ -128,12 +133,12 @@
         const videoStop = document.getElementById('stop');
         const videoShow = document.getElementById('video-show');
 
-        const videoRecord = new RecordVideo({
-            video: videoContainer,
-            execpt: function() {
+        const videoRecord = new RecordVideo(
+            videoContainer,
+            function() {
                 alert('请开启浏览器的摄像头、麦克风权限');
             }
-        });
+        );
         if (!videoRecord._isSupport()) {
             alert('当前浏览器不支持，推荐使用chrome或者firefox浏览器');
         }
