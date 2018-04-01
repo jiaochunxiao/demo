@@ -86,6 +86,9 @@ input.onchange = function (event) {
 
 ## PC调起摄像头录像
 
+主要利用了navigator.mediaDevices.getUserMedia及MediaRecorder。
+```
+```
 [线上demo](https://jiaochunxiao.github.io/demo/html/mediadevice.html)
 
 
