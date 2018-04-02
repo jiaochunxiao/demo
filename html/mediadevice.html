@@ -55,7 +55,7 @@
         <div class="tips">
             本demo主要用于PC端，调用摄像头录制视频，并转码。
         </div>
-        <video id="video" autoplay sytle=></video>
+        <video id="video" autoplay mute></video>
         <div class="video-action">
             <button id="start">开始录像</button>
             <button id="stop">停止录像</button>
@@ -69,9 +69,8 @@
          * 视频记录
          */
         class RecordVideo {
-            constructor(video, exceptCb, width, height) {
+            constructor(video, width, height) {
                 this.video = video;
-                this.exceptCb = exceptCb || function() {};
                 this.width = width || 640;
                 this.height = height || 480;
                 this.mediaRecorder = null;
@@ -80,34 +79,38 @@
             }
 
             init() {
-                navigator
-                    .mediaDevices
-                    .getUserMedia({
-                        video: {
-                            width: this.width,
-                            height: this.height
-                        },
-                        audio: true
-                    })
-                    .then(stream => {
-                        if ('srcObject' in this.video) {
-                            this.video.srcObject = stream;
-                        }
-                        else {
-                            this.video.src = window.URL.createObjectURL(stream);
-                        }
-                        this.video.addEventListener('loadmetadata', () => {
-                            this.video.play();
-                        });
-                        this.mediaRecorder = new MediaRecorder(stream);
+                return new Promise((resolve, reject) => {
+                    navigator
+                        .mediaDevices
+                        .getUserMedia({
+                            video: {
+                                width: this.width,
+                                height: this.height
+                            },
+                            audio: true
+                        })
+                        .then(stream => {
+                            if ('srcObject' in this.video) {
+                                this.video.srcObject = stream;
+                            }
+                            else {
+                                this.video.src = window.URL.createObjectURL(stream);
+                            }
+                            this.video.addEventListener('loadmetadata', () => {
+                                this.video.play();
+                            });
+                            this.mediaRecorder = new MediaRecorder(stream);
 
-                        this.mediaRecorder.addEventListener('dataavailable', e => {
-                            this.chunks.push(e.data);
-                        });
-                    })
-                    .catch(error => {
-                        this.execptCb();
-                    })
+                            this.mediaRecorder.addEventListener('dataavailable', e => {
+                                this.chunks.push(e.data);
+                            });
+                            resolve();
+                        })
+                        .catch(error => {
+                            reject(error);
+                        })
+                })
+                
             }
             _start() {
                 if (this.mediaRecorder.state === 'inactive') {
@@ -133,17 +136,17 @@
         const videoStop = document.getElementById('stop');
         const videoShow = document.getElementById('video-show');
 
-        const videoRecord = new RecordVideo(
-            videoContainer,
-            function() {
-                alert('请开启浏览器的摄像头、麦克风权限');
-            }
-        );
+        const videoRecord = new RecordVideo(videoContainer);
         if (!videoRecord._isSupport()) {
             alert('当前浏览器不支持，推荐使用chrome或者firefox浏览器');
         }
         else {
-            videoRecord.init();
+            const videoPromise = videoRecord.init();
+            videoPromise
+                .then()
+                .catch(err => {
+                    console.log(err);
+                })
             videoStart.addEventListener('click', () => {
                 console.log('start');
                 videoRecord._start();
