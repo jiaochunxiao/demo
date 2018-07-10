@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>anchorscroll</title>
+    <style type="text/css">
+    html,
+    body {
+        padding: 0;
+        margin: 0;
+    }
+    ul,
+    li {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+    .anchor-container {
+        position: fixed;
+        left: 0;
+        top: 0;
+        right: 0;
+        height: 50px;
+        z-index: 9;
+        background-color: #fff;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, .1);
+    }
+    .anchor-nav-active-icon {
+        position: absolute;
+        left: 10%;
+        top: 48px;
+        height: 2px;
+        background-color: #fc9153;
+        transition: left .2s linear;
+    }
+    .anchor-nav {
+        margin: 0 auto;
+        width: 80%;
+        height: 50px;
+        font-size: 0;
+    }
+    .anchor-nav-cell {
+        display: inline-block;
+        font-size: 14px;
+        width: 25%;
+        text-align: center;
+        color: #333;
+        font-size: 18px;
+        line-height: 50px;
+        cursor: pointer;
+    }
+    .anchor-nav-cell-active {
+        color: #fc9153;
+    }
+    .container {
+        margin-top: 50px;
+    }
+    .anchor-content {
+        height: 500px;
+        box-sizing: border-box;
+        border-top: 1px solid #ccc;
+        text-align: center;
+    }
+    </style>
+</head>
+<body>
+    <div class="anchor-container">
+        <ul class="anchor-nav">
+            <li class="anchor-nav-cell anchor-nav-cell-active">A</li>
+            <li class="anchor-nav-cell">B</li>
+            <li class="anchor-nav-cell">C</li>
+            <li class="anchor-nav-cell">D</li>
+        </ul>
+        <i class="anchor-nav-active-icon"></i>
+    </div>
+    <div class="container">
+        <section class="anchor-content">A</section>
+        <section class="anchor-content">B</section>
+        <section class="anchor-content">C</section>
+        <section class="anchor-content">D</section>
+    </div>
+    <script type="text/javascript">
+    var navItemWidth = document.getElementsByClassName('anchor-nav-cell')[0].offsetWidth;
+    var navItemActiveIcon = document.getElementsByClassName('anchor-nav-active-icon')[0];
+    navItemActiveIcon.style.width = navItemWidth + 'px';
+
+    window.onscroll = throttle(scrollFun, 16);
+    
+    var navItems = document.getElementsByClassName('anchor-nav-cell');
+
+    var sections = document.querySelectorAll('.anchor-content');
+
+    var topList = getTopList();
+
+
+    for (var m = 0; m < navItems.length; m++) {
+        navItems[m].index = m;
+        navItems[m].onclick = function() {
+            for (var n = 0; n < navItems.length; n++) {
+                if (n === this.index) {
+                    navItems[n].classList.add('anchor-nav-cell-active');
+                    var iconLeft = document.getElementsByClassName('anchor-nav-cell-active')[0].offsetLeft;
+                    navItemActiveIcon.style.left = iconLeft + 'px';
+                    scrollToSection(n);
+                }
+                else {
+                    navItems[n].classList.remove('anchor-nav-cell-active');
+                }
+            }
+        }
+    }
+    // 获取各模块距离页面顶部距离
+    function getTopList() {
+        
+        var navs = Array.prototype.slice.call(sections);
+        var navContainerHeight = document.getElementsByClassName('anchor-container')[0].offsetHeight;
+        return navs.map(function (item, index) {
+            return item.offsetTop - navContainerHeight;
+        })
+    }
+    // 简化版函数节流实现
+    function throttle(fn, threshold) {
+        var flag = true;
+        return function() {
+            var context = this;
+            var args = arguments;
+            if (!flag) return;
+            flag = false;
+            setTimeout(function() {
+                fn.apply(context, args);
+                flag = true;
+            }, threshold);
+        }
+    }
+    // 滚动处理函数
+    function scrollFun() {
+        var currTop = document.documentElement.scrollTop || document.body.scrollTop;
+        var index = 0;
+        for(var i = 0; i < topList.length; i++) {
+            if (currTop >= topList[i]) {
+                index = i;
+            }
+            else if (currTop < topList[i]) {
+                break;
+            }
+        }
+        if (currTop >= document.body.scrollHeight - window.innerHeight) {
+            index = topList.length - 1;
+        }
+
+        for (var n = 0; n < topList.length; n++) {
+            if (n === index) {
+                navItems[n].classList.add('anchor-nav-cell-active');
+            }
+            else {
+                navItems[n].classList.remove('anchor-nav-cell-active');
+            }
+        }
+        var iconLeft = document.getElementsByClassName('anchor-nav-cell-active')[0].offsetLeft;
+        navItemActiveIcon.style.left = iconLeft + 'px';
+    }
+    // 点击时scrollto 对应的 section
+    function scrollToSection(index) {
+        var currTop = document.documentElement.scrollTop || document.body.scrollTop;
+        var targetTop = topList[index];
+        var startTime = +new Date();
+        var duration = 300;
+        var intervalId = setInterval(function () {
+            var remainTime = Math.max(0, startTime + duration - (+new Date()));
+            var temp = remainTime/duration || 0;
+            var percent = 1 - temp;
+            if (percent === 1) {
+                clearInterval(intervalId);
+            }
+            window.scrollTo(0, currTop + (targetTop - currTop) * percent);
+        }, 16);
+    }
+    </script>
+</body>
+</html>
